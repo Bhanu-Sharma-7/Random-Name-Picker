@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Random Name Picker</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <div class="container">
+    <h1>🎲 Pull a Random Name</h1>
+    <button onclick="getName()">Pick Name</button>
+    <p id="nameDisplay">Click the button!</p>
+  </div>
+
+  <script>
+    async function getName() {
+      const response = await fetch('/random');
+      const data = await response.json();
+      document.getElementById('nameDisplay').innerText = data.name;
+    }
+  </script>
+</body>
+</html>
