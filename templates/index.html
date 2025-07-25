@@ -1,22 +1,91 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Random Name Picker</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>🎲 Random Name Picker</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(to right, #6366f1, #3b82f6);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      color: #fff;
+    }
+
+    .container {
+      background-color: rgba(0, 0, 0, 0.4);
+      padding: 2rem 2.5rem;
+      border-radius: 16px;
+      text-align: center;
+      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.3);
+      width: 90%;
+      max-width: 400px;
+    }
+
+    h1 {
+      margin-bottom: 1.5rem;
+      font-size: 1.75rem;
+    }
+
+    button {
+      background-color: #facc15;
+      color: #000;
+      padding: 0.75rem 1.5rem;
+      border: none;
+      border-radius: 8px;
+      font-weight: bold;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #eab308;
+    }
+
+    #nameDisplay {
+      margin-top: 2rem;
+      font-size: 1.5rem;
+      font-weight: bold;
+      opacity: 0;
+      transition: opacity 0.5s ease-in-out, transform 0.5s ease;
+    }
+
+    #nameDisplay.show {
+      opacity: 1;
+      transform: scale(1.1);
+    }
+  </style>
 </head>
 <body>
   <div class="container">
-    <h1>🎲 Pull a Random Name</h1>
-    <button onclick="getName()">Pick Name</button>
+    <h1>🎲 Random Name Picker</h1>
+    <button onclick="getName()">Pick a Name</button>
     <p id="nameDisplay">Click the button!</p>
   </div>
 
   <script>
     async function getName() {
-      const response = await fetch('/random');
-      const data = await response.json();
-      document.getElementById('nameDisplay').innerText = data.name;
+      const display = document.getElementById('nameDisplay');
+      display.classList.remove('show');
+      display.innerText = 'Picking...';
+
+      try {
+        const response = await fetch('/random');
+        const data = await response.json();
+
+        setTimeout(() => {
+          display.innerText = `🎉 ${data.name}`;
+          display.classList.add('show');
+        }, 500);
+      } catch (err) {
+        display.innerText = '⚠️ Error fetching name!';
+      }
     }
   </script>
 </body>
